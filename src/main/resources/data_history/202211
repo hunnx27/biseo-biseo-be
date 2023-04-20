@@ -1,0 +1,339 @@
+/**
+Company 데이터 이관시 is_delete 가 null인상태카페24
+UPDATE plates.company Set is_delete ="N" WHERE is_delete =NULL
+ ...
+*/
+/**
+Account 이관
+INSERT INTO plates.account
+( id, created_at, deleted_at, is_delete, lasted_at, modified_at, device_gubn,
+device_id, gubn, birthyyyy, interest_company, interest_tag, interest_zone,
+major_department, major_school, notice_yn, password, `point`, push_yn, `role`,
+sns_id, sns_type, temp1, temp2, user_id, company_id, grade)
+Select id,created_at ,deleted_at ,is_delete ,lasted_at ,modified_at
+,device_gubn ,device_id ,gubn ,birthyyyy ,interest_company , interest_tag
+,interest_zone
+,major_department ,major_school ,notice_yn ,password , `point`, push_yn ,NULL
+,sns_id ,sns_type,temp1 ,null ,user_id ,null ,null
+from plates.NewTable where 1=1;
+
+*/
+/**
+Account 데이터 이관시 Role USER
+UPDATE plates.account Set `role` ="USER" WHERE 1=1
+ ...
+*/
+
+/**
+Account 데이터 이관시 Point 기반으로 Grade 설정
+UPDATE plates.account
+SET grade = (SELECT grade From plates.grade where `point` BETWEEN plates.grade.start_tot and plates.grade.end_tot)
+*/
+
+
+*/
+/** 이관데이터
+
+/* amt
+
+INSERT INTO plates.year_amt_review
+( id, created_at,deleted_at,is_delete,lasted_at,modified_at,amt,amt_old
+,ann_yn,appr_dt,appr_id,appr_txt,end_atm_yn,etc_amt,etc_items,etc_yn,
+mapsidogungu_name,state,topchoice_dt,topchoice_yn,work_exp,work_exp_open_yn
+,zonecode,company_id,account_id)
+Select id ,created_at ,null ,is_delete ,null,null,amt,amt_old ,ann_yn ,appr_dt ,appr_id ,appr_txt ,
+end_amt_yn ,etc_amt ,etc_items ,etc_yn ,null,state ,topchoice_dt ,topchoice_yn ,work_exp ,work_exp_open_yn ,
+null, IFNULL((SELECT company_id from plates.company c where c.id=n.company_id), -1),ifnull((SELECT id from plates.account a where a.user_id=n.user_id),-1)
+from plates.NewTable n where 1=1;
+
+/* company
+
+INSERT INTO plates.company
+(id, created_at, deleted_at, is_delete, lasted_at, modified_at, age_peoples, char_items, curr_people, director, establishment_type, eval_items, evaluate_yn, event_banner_date, fax_num, fill, gps_x, gps_y, homepage, interest_company, juso, office_name, open_dt, per_items, phone_num, run, sync_code, tot_people, use_yn, zipcode, zonecode)
+VALUES(-1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, '삭제된 기업', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+
+/* company_review
+
+Insert into plates.company_review
+(id,account_id,company_id,txt,work_exp,created_at,appr_dt,appr_txt,appr_id,state,
+item_b1,item_b2 ,item_b3 ,item_c1 ,item_c2 ,item_c3 ,item_d1 ,item_d2 ,like_code,
+image1 ,image2 ,image3 ,image4 ,image5 ,is_delete ,work_exp_open_yn
+)
+Select idx_no, IFNULL((SELECT id from plates.account a where a.user_id=nt.id),-1),
+IFNULL((SELECT code from plates.company c where c.id=nt.code), -1),
+txt,work_exp,create_dt,appr_dt,appr_txt,appr_id,state,
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',1), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',2), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',3), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',4), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',5), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',6), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',7), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',8), ',', -1),
+SUBSTRING_INDEX(SUBSTRING_INDEX(review_jumsu,',',9), ',', -1),
+image_1,image_2,image_3,image_4,image_5,del_yn,work_exp_open_yn
+FROM plates.NewTable nt
+WHERE 1=1;
+
+
+/* grade
+
+INSERT INTO plates.grade
+(id, create_dt, end_tot, grade, icon_url, replay_rate, reply_cnt, start_tot, use_yn)
+VALUES(-1, null, null, '삭제된 등급', null, null, null, null, 'N');
+
+INSERT INTO plates.grade
+(
+id ,grade ,icon_url ,start_tot ,end_tot ,replay_rate ,reply_cnt ,use_yn ,create_dt
+)
+SELECT idx_no,code,icon_url,start_tot,end_tot,
+reply_rate,reply_cnt,use_yn,create_dt
+FROM plates.NewTable_2 nt
+WHERE 1=1
+
+
+/* interview
+
+Insert into plates.interview_review
+(id, account_id,company_id,created_at,appr_dt,state,appr_txt,work_exp,topq1 ,item_1,item_2,item_3,item_4,item_5,item_6,
+is_delete,work_exp_open_yn)
+Select idx_no, IFNULL((SELECT id from plates.account a where a.user_id=nt.id),-1), IFNULL((SELECT code from plates.company c where c.id=nt.code), -1),create_dt,appr_dt,state,appr_txt,work_exp,q_1 ,item_1,item_2,item_3,item_4,item_5,
+item_6,del_yn,work_exp_open_yn
+FROM plates.NewTable nt
+WHERE 1=1
+;
+
+
+/* item
+insert into plates.interview_review_item(
+interviewq ,interviewa ,interviewaq ,interviewaa ,interview_id
+)
+Select q_1, a_1, q_1_admin, a_1_admin, idx_no
+FROM plates.NewTable nt1
+where q_1 != ''
+union all
+Select q_2, a_2 ,q_2_admin, a_2_admin, idx_no
+FROM plates.NewTable nt1
+where q_2 != ''
+union all
+Select q_3, a_3,q_3_admin, a_3_admin, idx_no
+FROM plates.NewTable nt1
+where q_3 != ''
+;
+
+/* counsel
+
+INSERT into plates.counsel
+(
+id ,
+gubn ,
+account_id ,
+job_gubn ,
+txt ,
+qna_gubn ,
+counsel_state ,
+counsel_state_at ,
+open_yn ,
+created_at ,
+image1 ,
+image2 ,
+image3 ,
+image4 ,
+image5 ,
+input_tag ,
+report_cnt ,
+comment_txt ,
+parent_counsel_id ,
+interest_company ,
+related_zone ,
+is_delete ,
+short_open_yn,
+qna_item
+)
+SELECT
+idx_no ,
+gubn ,
+IFNULL((SELECT id from plates.account a where a.user_id=nt.id),-1),
+job_gubn ,
+txt,
+qna_gubn ,
+state ,
+state_date ,
+open_yn ,
+create_dt ,
+image_1 ,
+image_2 ,
+image_3 ,
+image_4 ,
+image_5 ,
+input_tag  ,
+report_cnt ,
+comment_txt ,
+q_code,
+code_1,
+ci,
+del_yn,
+short_open_yn,
+CASE WHEN gubn = "I" THEN CONCAT("QI",qna_item_cd)
+WHEN gubn="S"THEN CONCAT("QS",qna_item_cd)
+ELSE null
+END
+FROM plates.NewTable nt
+WHERE 1=1
+
+
+
+
+/* counsel_coment
+init 하기전에 -1 칼럼 넣기 위해 PK제거
+ALTER TABLE plates.counsel_comment DROP PRIMARY KEY;
+ALTER TABLE plates.counsel_comment ADD PRIMARY KEY (id);
+
+
+INSERT INTO plates.counsel
+(id, created_at, deleted_at, is_delete, lasted_at, modified_at, comment_txt, counsel_state, counsel_state_at, gubn, image1, image2, image3, image4, image5, img_url, input_tag, interest_company, job_gubn, open_yn, qna_gubn, qna_item, related_zone, report_cnt, short_open_yn, txt, account_id, parent_counsel_id)
+VALUES(-1, '2022-11-17 18:00:30', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, -1, NULL);
+
+INSERT INTO counsel_comment
+(
+id,answer_counsel_id ,account_id ,gubn ,txt,created_at ,modified_at ,is_delete
+)
+SELECT idx_no ,IFNULL((SELECT cs.id  from counsel cs where cs.id = nt.a_no),-1) ,IFNULL((SELECT id from account a where nt.id=a.user_id),-1) , gubn, txt ,create_dt,modi_dt,use_yn
+FROM NewTable nt
+WHERE 1=1
+
+/* recommend
+
+INSERT into counsel_recommend
+(id, account_id, counsel_id,recommend_gubn,created_at)
+SELECT idx_no,
+IFNULL((SELECT id from account a where a.user_id= nt.user_id),-1),
+IFNULL((SELECT id from counsel c where c.id=nt.recommand_id),-1),
+gubn,
+create_dt
+FROM NewTable nt
+WHERE 1=1
+
+/* faq
+
+
+INSERT INTO plates.faq (
+id,user_id ,device_gubn,category,title,content,create_dt,
+use_yn
+)
+select idx_no, id ,device_gubn,category,title,content,create_dt ,use_yn
+from plates.NewTable_2 n where 1=1;
+
+/* follower
+
+INSERT INTO plates.follower  (
+id,account_id ,company_id ,created_at ,gubn_code
+)
+select idx_no,IFNULL((SELECT id from plates.account a  where a.user_id =n.id), -1),IFNULL((SELECT id from plates.company c  where c.id  =n.code), -1),create_dt,gubn_code
+from plates.NewTable_2 n where 1=1;
+
+
+/* menu
+
+INSERT INTO menu
+(id, `role`,main_code,sub_code,link,subject,is_delete,created_at)
+SELECT null, "ADMIN" , main_code, sub_code ,link, subject, display_yn,create_dt
+FROM NewTable nt
+WHERE 1=1
+
+/* notice
+
+
+INSERT INTO plates.notice
+(id,account_id,device_gubn,title,content,create_dt,use_yn)
+SELECT null, IFNULL((SELECT id from account a where a.user_id = SHA(nt.id)),-1), device_gubn,title,content,create_dt,use_yn
+FROM NewTable nt
+WHERE 1=1
+
+/** size
+
+alter table interview_review_item modify interviewq VARCHAR(1000);
+alter table interview_review_item modify interviewa VARCHAR(1000);
+alter table interview_review_item modify interviewaq VARCHAR(1000);
+alter table interview_review_item modify interviewaa VARCHAR(1000);
+ALTER table plates.company_review modify txt VARCHAR(1000);
+ALTER table plates.company_review modify appr_txt VARCHAR(1000);
+ALTER table interview_review modify topq1 VARCHAR(1000);
+ALTER table counsel  modify comment_txt VARCHAR(1000);
+ALTER table counsel  modify txt VARCHAR(1000);
+ALTER TABLE notice modify content text;
+ALTER TABLE counsel_comment modify txt text ;
+ALTER table plates.faq modify content TEXT
+/** 사용 해야할까 싶음
+YearAmt 데이터 이관시 id 생성전략 시작숫자
+ALTER TABLE plates.year_amt_review
+AUTO_INCREMENT=288;
+
+/** companies
+
+
+INSERT INTO companies
+(
+id,account_id ,fix_text ,state ,create_dt ,appr_dt ,appr_id ,appr_txt,fix_option
+)
+SELECT idx_no,IFNULL((SELECT id from account a where a.temp1 = nt.id),-1)
+,txt,state,create_dt,modi_dt,modi_id,modi_txt,"A"
+FROM NewTable nt
+WHERE 1=1
+
+--  modi
+INSERT INTO companies
+(
+id,account_id,company_id ,fix_text ,process  ,create_dt ,appr_dt ,appr_id ,appr_txt,fix_option
+)
+SELECT null,IFNULL((SELECT id from account a where a.user_id  = nt.id),-1),IFNULL((SELECT id from company c where c.id  = nt.code),-1)
+,txt,state,create_dt,modi_dt,modi_id,modi_txt,"F"
+FROM NewTable nt
+WHERE 1=1
+
+
+--- update 이후
+
+UPDATE counsel_comment
+set is_delete  = CASE WHEN is_delete = "Y" THEN  "N"
+WHEN is_delete ="N" THEN "Y"
+ELSE NULL
+END
+
+UPDATE plates.counsel cs
+SET report_cnt = (SELECT COUNT(*) from counsel c where c.parent_counsel_id = cs.id)
+WHERE cs.qna_gubn ="Q"
+
+
+*/
+
+/*
+
+INSERT INTO event_item
+(
+id,account_id,event_id  ,answer  ,phone  ,create_dt  ,chu  ,temp
+)
+SELECT nt.idx_no ,IFNULL((SELECT id from account a where a.user_id  = nt.id),-1),IFNULL((SELECT id from event e where e.id  = nt.gubn),-1)
+,nt.answer ,nt.phone ,create_dt,nt.chu ,nt.temp
+FROM NewTable nt
+WHERE 1=1
+
+update event
+set submit_popup_location =
+        case  submit_popup_location
+            when '0' then concat(null)
+            else submit_popup_location
+        end
+
+update event
+set button_landing =
+        case  button_landing
+            when '0' then concat(null)
+            else button_landing
+        end
+
+INSERT INTO plates.event
+(button_landing, content, create_dt, device_gubn, end_dt, facebook_landing_url, img_url, landing_url, notice_id, popup_show_option, start_dt, submit_popup, submit_popup_location, title, use_yn)
+VALUES(NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"삭제된 이벤트","N");
+
+**/

@@ -1,0 +1,43 @@
+server:
+  port: 9101
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  config:
+    activate:
+      on-profile: local
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+springdoc:
+  api-docs:
+    path: /api-docs
+
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+##org.hibernate.type: trace
+#
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    reactor:
+      netty:
+        http:
+          client: trace
+
+onz:
+  jwt:
+    secret: UFMgZFP4ciZDx/FfK3U16X6Mm3M=

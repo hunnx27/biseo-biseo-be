@@ -1,0 +1,31 @@
+/**
+ company.establishment_type의 밸류를 변경
+ ex)
+ 01 > P01 or C01
+ 02 > P02 or C02
+ ...
+*/
+update company
+set establishment_type =
+        case  interest_company
+            when 'CT' then concat('C', establishment_type)
+            when 'PT' then concat('P', establishment_type)
+            else establishment_type
+        end
+
+/**
+notice.device_gubn 의 벨류를 변경
+event_gubn.device_gubn의 벨류를 변경
+faq.device_gubn 의 벨류를 변경
+ex)
+0 -> P
+*/
+/**
+update notice
+set device_gubn =
+        case  device_gubn
+            when '0' then concat('P', device_gubn)
+            else device_gubn
+        end
+*/
+

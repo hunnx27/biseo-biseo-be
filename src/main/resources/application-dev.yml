@@ -1,0 +1,70 @@
+server:
+  port: 9101
+
+spring:
+  datasource:
+    url: jdbc:mysql:aws://db-onz-dev-2022.cmrfdf0pzgad.ap-northeast-2.rds.amazonaws.com:3306/plates?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL
+    username: plates
+    password: plates!Q@W#E4r
+    driver-class-name: software.aws.rds.jdbc.mysql.Driver
+    hikari:
+      pool-name: jpa-hikari-pool
+      maximum-pool-size: 30
+      jdbc-url: ${spring.datasource.url}
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+      driver-class-name: ${spring.datasource.driver-class-name}
+      data-source-properties:
+        rewriteBatchedStatements: true
+    # 기초데이터 SQL 경로 설정
+
+  jpa:
+    hibernate:
+#      ddl-auto: create-drop
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: com.onz.config.CustomMysqlDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+#      mode: never; # always/embedded/never #FIXME 최초실행시 always로 실행(기초데이터입력)
+      mode: never
+      data-locations: classpath:company_data.sql
+#      schema-locations: classpath:schema.sql
+
+  config:
+    activate:
+      on-profile: dev
+    import: oauth2.yml
+
+  servlet.multipart:
+    max-file-size: 10MB # total file size cannot exceed 10MB.
+    max-request-size: 20MB # total request size for a multipart/form-data cannot exceed 20MB.
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+##org.hibernate.type: trace
+#
+logging:
+  level:
+    root: info
+    #org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    reactor:
+      netty:
+        http:
+          client: trace
+
+onz:
+  jwt:
+    secret: UFMgZFP4ciZDx/FfK3U16X6Mm3M=
+
+file:
+  path:
+    root: C:\data
+    data: Data
+

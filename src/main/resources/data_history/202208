@@ -1,0 +1,72 @@
+/* Company 복원 */
+/*
+set pseudo_slave_mode=true;
+SET @@SESSION.pseudo_slave_mode = true;
+SET GLOBAL log_bin_trust_function_creators = 1;
+`AWS RDS 파라미터그룹 log_bin_trust_function_creators을 1로 설정함`
+sed -i 's/NO_AUTO_CREATE_USER//' d:/develop/db_bak/onz_legacy_live_0706_5.1.sql
+sed 's/\sDEFINER=`[^`]*`@`[^`]*`//g' -i d:/develop/db_bak/onz_legacy_live_0706_5.1.sql
+mysql -h db-onz-dev-2022.cmrfdf0pzgad.ap-northeast-2.rds.amazonaws.com --port=3306 -p -u oneandzip onz-live0706 < d:\develop\db_bak\onz_legacy_live_0706_5.1.sql
+*/
+INSERT INTO `plates`.`company`
+(`id`,
+`created_at`,
+`is_delete`,
+`modified_at`,
+`age_peoples`,
+`char_items`,
+`curr_people`,
+`director`,
+`establishment_type`,
+`eval_items`,
+`evaluate_yn`,
+`event_banner_date`,
+`fax_num`,
+`fill`,
+`gps_x`,
+`gps_y`,
+`interest_company`,
+`homepage`,
+`juso`,
+`office_name`,
+`open_dt`,
+`per_items`,
+`phone_num`,
+`run`,
+`sync_code`,
+`tot_people`,
+`use_yn`,
+`zipcode`,
+`zonecode`)
+SELECT
+    idx_no,
+	create_Dt,
+	'N',
+	modi_Dt,
+	age_Peoples,
+	char_Items,
+	curr_People,
+	director,
+	code_2,
+	eval_items,
+	evaluate,
+	event_banner_date,
+	fax_Num,
+	fill,
+	gps_x,
+    gps_y,
+    code_1,
+	homepage,
+	juso,
+    office_name,
+    open_Dt,
+    per_Items,
+    phone_Num,
+    run,
+    sync_Code,
+    tot_People,
+	use_Yn,
+    zipcode,
+    ci
+FROM
+    `onz-live0706`.wnz_company;
