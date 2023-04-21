@@ -90,8 +90,8 @@ public class AccountRepositoryExtensionImpl extends QuerydslRepositorySupport im
         byte[] encode1 = new byte[0];
         byte[] encode2 = new byte[0];
         try {
-            String key1 = String.format("%s%s%s", "ONZ!@#", Gubn.TEACHER.getCode(), snsType.getCode());
-            String key2 = String.format("%s%s%s", "ONZ!@#", Gubn.PARENT.getCode(), snsType.getCode());
+            String key1 = String.format("%s%s%s", "ONZ!@#", Gubn.BISEO.getCode(), snsType.getCode());
+            String key2 = String.format("%s%s%s", "ONZ!@#", Gubn.NOBISEO.getCode(), snsType.getCode());
             encode1 = MysqlAESUtil.encryptoByte(key1, plainUserId);
             encode2 = MysqlAESUtil.encryptoByte(key2, plainUserId);
         } catch (Exception e) {

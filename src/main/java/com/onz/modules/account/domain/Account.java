@@ -53,7 +53,7 @@ public class Account extends BaseEntity {
 
     //@Enumerated(EnumType.STRING)
     @Convert(converter = GubnConverter.class)
-    private Gubn gubn = Gubn.PARENT;
+    private Gubn gubn = Gubn.BISEO;
 
     private Integer point;
 

@@ -32,7 +32,7 @@ public class Counsel extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Convert(converter = GubnConverter.class)
-    private Gubn gubn = Gubn.PARENT;
+    private Gubn gubn = Gubn.BISEO;
     @Enumerated(EnumType.STRING)
     private JobGubn jobGubn;
     @Enumerated(EnumType.STRING)

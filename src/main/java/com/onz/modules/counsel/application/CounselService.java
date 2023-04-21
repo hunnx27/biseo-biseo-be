@@ -294,7 +294,7 @@ public Counsel create(CounselQCreateRequest counselQCreateRequest, UserPrincipal
 
     public CounselSearchCountDto tagmoa(String gubn) {
         List<String> gubnCodeList = Arrays.stream(Gubn.values()).map(Enum::name).collect(Collectors.toList());
-        String gubnCode = Gubn.TEACHER.getCode();
+        String gubnCode = Gubn.BISEO.getCode();
         if(gubnCodeList.contains(gubn)){
             gubnCode = Gubn.valueOf(gubn).getCode();
         }

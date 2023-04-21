@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 public enum Gubn {
-    TEACHER("S", "유아교사"),
-    PARENT("I", "예비교사")
+    BISEO("B", "비서"),
+    NOBISEO("N", "노비서")
     ;
 
     private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(
