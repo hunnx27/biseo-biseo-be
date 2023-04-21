@@ -3,7 +3,9 @@ Boiler Plate
 ## 환경
 - Framework: SpringBoot 2.6.7
 - JDK: JAVA 11
-- DB handling: JPA, QueryDsl
+- DB handling: JPA, QueryDsl, mysql:8.0.33 
+- ```docker pull mysql:8.0.33```
+- ```docker run --name mysql8.0.33-biseo-biseo -e MYSQL_ROOT_PASSWORD=chlwlgns27@ -d -p 3309:3306 mysql:8.0.33```
 - build: Maven
 
 ## Code Style Guide

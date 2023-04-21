@@ -3,21 +3,9 @@ server:
 
 spring:
   datasource:
-    # 기존 원앤집 DB
-#    url: jdbc:mysql:aws://db-onz-dev-2022.cmrfdf0pzgad.ap-northeast-2.rds.amazonaws.com:3306/plates?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL
-#    username: plates
-#    password: plates!Q@W#E4r
-#    driver-class-name: software.aws.rds.jdbc.mysql.Driver
-    # H2 디비설정
-#    url: jdbc:h2:mem:test
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-    # biseo-biseo mysql8.0.33
-    url: jdbc:mysql://localhost:3309/biseo?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL
-    username: biseo
-    password: chlwlgns27@
-    #driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:aws://db-onz-dev-2022.cmrfdf0pzgad.ap-northeast-2.rds.amazonaws.com:3306/plates?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL
+    username: plates
+    password: plates!Q@W#E4r
     driver-class-name: software.aws.rds.jdbc.mysql.Driver
     hikari:
       pool-name: jpa-hikari-pool
@@ -32,25 +20,20 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
-      #ddl-auto: update
-      #ddl-auto: create
+#      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        #dialect: org.hibernate.dialect.H2Dialect
         dialect: com.onz.config.CustomMysqlDialect
-
-
     defer-datasource-initialization: true
   sql:
     init:
 #      mode: never; # always/embedded/never #FIXME 최초실행시 always로 실행(기초데이터입력)
-      #mode: never
-      mode: always
-      #data-locations: classpath:company_data.sql
+      mode: never
+      data-locations: classpath:company_data.sql
 #      schema-locations: classpath:schema.sql
 
   config:
