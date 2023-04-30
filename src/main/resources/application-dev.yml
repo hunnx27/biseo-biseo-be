@@ -41,7 +41,7 @@ spring:
         format_sql: true
         #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         #dialect: org.hibernate.dialect.H2Dialect
-        dialect: com.onz.config.CustomMysqlDialect
+        dialect: com.biseo.config.CustomMysqlDialect
 
 
     defer-datasource-initialization: true
@@ -76,7 +76,7 @@ logging:
         http:
           client: trace
 
-onz:
+biseo:
   jwt:
     secret: UFMgZFP4ciZDx/FfK3U16X6Mm3M=
 
