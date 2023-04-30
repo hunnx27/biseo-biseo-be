@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    # 기존 원앤집 DB
+    # 기존 비서 DB
 #    url: jdbc:mysql:aws://db-onz-dev-2022.cmrfdf0pzgad.ap-northeast-2.rds.amazonaws.com:3306/plates?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL
 #    username: plates
 #    password: plates!Q@W#E4r
